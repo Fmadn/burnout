@@ -15,12 +15,13 @@ function love.load()
     __debug = true
     game_Width, game_Height = 1080, 720 --fixed game resolution
     wind_Width, wind_Height = love.graphics.getDimensions()
-    wind_scale = 1
+    wind_scale = 0.9
     wind_Width, wind_Height = game_Width * wind_scale, game_Height * wind_scale
 
     --// TEST DOANG \\--
-    middle_x, middle_y = game_Width / 2, game_Height / 2   -- pakai game_Width/Height, bukan wind_
-    local size = 50
+    middle_x, middle_y = game_Width / 2, game_Height / 2 -- pakai game_Width/game_Height, bukan wind_
+    local size = 60
+
     local width, height = 10, 10
     local tileWidth  = size * width
     local tileHeight = size * height
