@@ -19,14 +19,14 @@ function tile.new(x, y, width, height, size)
 
     if __debug then
         for i, tile in ipairs(self.tiles) do
-            print("Tile "..i.." : "..tile.x..","..tile.y)
+            print("Tile_ID "..i.." : "..tile.x..","..tile.y.." | type: "..tile.data.type.." | ec: "..tile.data.ec)
         end
     end
-
+    
     function self:draw()
         local size = self.tile_size
         for i, tile in ipairs(self.tiles) do
-            love.graphics.rectangle("line", (tile.x-1)*size, (tile.y-1)*size, size, size)
+            love.graphics.rectangle("line", (tile.x-1)*size+self.x, (tile.y-1)*size+self.y, size, size)
         end
     end
 
