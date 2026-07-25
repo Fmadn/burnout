@@ -12,7 +12,7 @@ function tile.new(pos_x, pos_y, tiles)
 
     if __debug then
         for i, tile in ipairs(self.tiles) do
-            -- print("Tile_ID "..i.." : "..tile.x..","..tile.y.." | type: "..tile.type)
+            print("Tile_ID "..i.." : "..tile.x..","..tile.y.." | type: "..tile.type)
         end
     end
 

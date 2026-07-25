@@ -1,5 +1,9 @@
 local Players = {}
 
+local function is_inside(x, y, width, height, px, py)
+    return px >= x and px <= x + width and py >= y and py <= y + height
+end
+
 --[=[
     Bikin player di grid tertentu.
     x atau y gak boleh lebih dari width grid, height grid atau kurang dari 0.
@@ -9,11 +13,11 @@ local Players = {}
 function Players.new(x,y, energy)
     local self = setmetatable({}, {__index = Players})
 
-    if not tile then
+    if not tiles then
         error("Tile not found. Make sure to create a tile before creating a player.")
     end
 
-    if x < 0 or x >= tile.width or y < 0 or y >= tile.height then
+    if is_inside(0, 0, tile_data.width, tile_data.height-1, x, y) == false then
         error("Player position out of bounds. x and y must be within the grid dimensions.")
     end
 
@@ -54,7 +58,7 @@ function Players:move(dx, dy)
     end
     
     -- Check bounds
-    if newX > 0 and newX < tile.width+1 and newY > 0 and newY < tile.height+1 then
+    if is_inside(0, 0, tile_data.width-1, tile_data.height-1, newX, newY) then
         self.energy = self.energy - 1
         self.x = newX
         self.y = newY
@@ -77,9 +81,10 @@ function Players:draw()
     -- ENERGY
     love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
 
-    local size = tile.tile_size or 32 -- Default size if not defined in tile
+    local width, height = tile_data.tilewidth * tile_size_mult, tile_data.tileheight * tile_size_mult
+    local size = math.min(width, height)
     love.graphics.setColor(1, 0, 0) -- Set color to red for the player
-    love.graphics.rectangle("fill", (self.x-1)*size + tile.x, (self.y-1)*size + tile.y, size, size)
+    love.graphics.rectangle("fill", (self.x)*size + tiles.x, (self.y-1)*size + tiles.y, size, size)
     love.graphics.setColor(1, 1, 1) -- Reset color to white
 end
 

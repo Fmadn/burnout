@@ -56,7 +56,7 @@ end
             elseif tile.type == "table" then
                 love.graphics.setColor(0.3, 0.2, 0) -- Dark brown for table
             else
-                love.graphics.setColor(1, 1, 1) -- Default to white for unknown types
+                love.graphics.setColor(0,0,0) -- Default to white for unknown types
             end
 
             love.graphics.rectangle("line", (tile.x-1)*tile_width+self.x, (tile.y-1)*tile_height+self.y, tile_width, tile_height)
