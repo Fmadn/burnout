@@ -10,6 +10,13 @@ function tile.new(pos_x, pos_y, tiles)
         error("No tiles provided for the tile map.")
     end
 
+    self.coffees = {}
+    for i, tile in ipairs(self.tiles) do
+        if tile.type == "coffee" then
+            table.insert(self.coffees, library.Coffee.new(tile.x, tile.y))
+        end
+    end
+
     if __debug then
         for i, tile in ipairs(self.tiles) do
             print("Tile_ID "..i.." : "..tile.x..","..tile.y.." | type: "..tile.type)
