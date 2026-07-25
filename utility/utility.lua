@@ -39,6 +39,18 @@ function utility.get_move_direction(key)
 end
 
 --[=[
+    Ambil sebuah file tile hanya
+    lewat nama.
+
+    @param tile_name: string
+    @return tile_file: {}
+]=]
+function utility.get_tile(tile_name)
+    local tile_file = require("asset/maps/"..tile_name)
+    return tile_file
+end
+
+--[=[
     Cek semua library
     dan load semuanya.
 

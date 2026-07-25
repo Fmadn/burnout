@@ -47,16 +47,15 @@ function Players:move(dx, dy)
     local newY = self.y + dy
 
     -- Check energy
-    if self.energy <= 0 then
+    if self.energy <= 1 then
         print("Player has no energy left to move.")
         self:set__status("Gameover")
         return
     end
-
-    self.energy = self.energy - 1
-
+    
     -- Check bounds
-    if newX > 0 and newX < tile.width and newY > 0 and newY < tile.height then
+    if newX > 0 and newX < tile.width+1 and newY > 0 and newY < tile.height+1 then
+        self.energy = self.energy - 1
         self.x = newX
         self.y = newY
     else
@@ -78,7 +77,7 @@ function Players:draw()
     -- ENERGY
     love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
 
-    local size = tile.tile_size
+    local size = tile.tile_size or 32 -- Default size if not defined in tile
     love.graphics.setColor(1, 0, 0) -- Set color to red for the player
     love.graphics.rectangle("fill", (self.x-1)*size + tile.x, (self.y-1)*size + tile.y, size, size)
     love.graphics.setColor(1, 1, 1) -- Reset color to white

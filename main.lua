@@ -20,12 +20,14 @@ function love.load()
 
     --// TEST DOANG \\--
     middle_x, middle_y = game_Width / 2, game_Height / 2 -- pakai game_Width/game_Height, bukan wind_
-    local size = 60
 
+    local size = 2
+    
+    local tile_width, tile_height = 32, 32
     local width, height = 10, 10
-    local tileWidth  = size * width
-    local tileHeight = size * height
-    tile = library.Tile.new(middle_x - tileWidth/2, middle_y - tileHeight/2, width, height, size)
+    local tilesWidth  = tile_width * width
+    local tilesHeight = tile_height * height
+    tile = library.Tile.new(middle_x - tilesWidth/2, middle_y - tilesHeight/2, width, height, tile_width, tile_height, utility.get_tile("tile_test").layers[2].objects)
     player = library.Player.new(5, 5) -- Contoh pembuatan player di posisi (5, 5)
 
     --// WINDOW \\--
