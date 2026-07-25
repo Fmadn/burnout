@@ -4,6 +4,20 @@ local function is_inside(x, y, width, height, px, py)
     return px >= x and px <= x + width and py >= y and py <= y + height
 end
 
+local function get_coffee_at_position(x, y)
+    for i, coffee in ipairs(tiles.coffees) do
+        local coffee_width = tile_data.tilewidth or 32
+        local coffee_height = tile_data.tileheight or 32
+        local coffee_x = coffee.x / coffee_width
+        local coffee_y = coffee.y / coffee_height
+
+        if coffee_x == x and coffee_y == y then
+            return coffee
+        end
+    end
+    return nil
+end
+
 --[=[
     Bikin player di grid tertentu.
     x atau y gak boleh lebih dari width grid, height grid atau kurang dari 0.
@@ -46,6 +60,17 @@ function Players:get__Position()
     return self.x, self.y
 end
 
+function Players:add__energy(amount)
+    -- pastikan nilainya gak lebih dari 100 dan kurang dari 0
+    if self.energy + amount > 100 then
+        self.energy = 100
+    elseif self.energy + amount < 0 then
+        self.energy = 0
+    else
+        self.energy = self.energy + amount
+    end
+end
+
 function Players:move(dx, dy)
     local newX = self.x + dx
     local newY = self.y + dy
@@ -58,12 +83,16 @@ function Players:move(dx, dy)
     end
 
     -- Check next tile type
+    local coffee = get_coffee_at_position(newX, newY)
     local next_tile_type = tiles:get_TileType(newX, newY)
     if next_tile_type == "wall" then
         print("Cannot move to a wall tile at: (" .. newX .. ", " .. newY .. ")")
         return
     elseif next_tile_type == "coffee" then
-        self.energy = self.energy + 5
+        -- self.energy = self.energy + 5
+        if coffee then
+            coffee:drink()
+        end
         return
     end
     
@@ -72,9 +101,13 @@ function Players:move(dx, dy)
         self.energy = self.energy - 1
         self.x = newX
         self.y = newY
+        for _, coffee in ipairs(tiles.coffees) do
+            coffee:move()
+        end
     else
         print("Move out of bounds: (" .. newX .. ", " .. newY .. ")")
     end
+    
 end
 
 function Players:set__status(status)

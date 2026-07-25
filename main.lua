@@ -54,5 +54,9 @@ function love.draw()
     library.Push:start()
         tiles:draw()
         player:draw()
+        -- coffee
+        for _, coffee in pairs(tiles.coffees) do
+            coffee:draw()
+        end
     library.Push:finish()
 end
