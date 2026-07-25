@@ -44,6 +44,7 @@ function desks:work()
     if self.requesting then
         print("Kerja!")
         self.requesting = false
+        self = nil
     end
 end
 
