@@ -54,6 +54,8 @@ function Players.new(x,y, energy)
     self.y = y or 0
     self.energy = energy or 100
 
+    self.cooldown = {0,false}
+
     self.__game = {}
     self.__game.time = "morning" -- "morning":1, "afternoon":0.5, "night":0.2
 
@@ -61,6 +63,19 @@ function Players.new(x,y, energy)
     self.__status = "active" -- "active" | "gameover"
 
     return self
+end
+
+function Players:update(dt)
+    if self.cooldown[2] then
+        if self.cooldown[1] > 0.05 then
+            self.cooldown[1] = 0
+            self.cooldown[2] = false
+        else
+            self.cooldown[1] = self.cooldown[1] + dt
+        end
+    else
+        self.cooldown[1] = 0
+    end
 end
 
 function Players:began__input(key)
@@ -92,6 +107,10 @@ function Players:move(dx, dy)
     local newX = self.x + dx
     local newY = self.y + dy
 
+    if self.cooldown[2] then
+        return
+    end
+
     -- Check energy
     if self.energy <= 1 then
         print("Player has no energy left to move.")
@@ -108,11 +127,13 @@ function Players:move(dx, dy)
         return
     elseif next_tile_type == "coffee" then
         if coffee then
+            self.cooldown[2] = true
             coffee:drink()
         end
         return
     elseif next_tile_type == "desk" then
         if desk then
+            self.cooldown[2] = true
             desk:work()
         end
         return
@@ -122,6 +143,7 @@ function Players:move(dx, dy)
         self.energy = self.energy - 1
         self.x = newX
         self.y = newY
+        self.cooldown[2] = true
         for _, coffee in ipairs(tiles.coffees) do
             coffee:move()
         end

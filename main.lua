@@ -54,6 +54,9 @@ function love.update(dt)
             table:update(dt)
         end
     end
+    if player then
+        player:update(dt)
+    end
 end
 
 function love.draw()
@@ -65,6 +68,9 @@ function love.draw()
             for _, coffee in pairs(tiles.coffees) do
                 coffee:draw()
             end
+            for _, desk in pairs(tiles.desks) do
+                desk:draw()
+            end
         end
     library.Push:finish()
 end
@@ -73,5 +79,5 @@ end
 function _start__session()
     tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
     recenter_tiles()
-    player = library.Player.new(0, 0, 100)
+    player = library.Player.new(5, 4, 100)
 end
