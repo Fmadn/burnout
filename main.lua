@@ -4,44 +4,48 @@ function love.conf(t)
 end
 
 function love.load()
-    --// SERVICES \\--
     utility = require("utility/utility")
 
-    --// INITIALIZATION \\--
     library = {}
     library = utility.load__library("library")
-    
-    --// VARIABLES \\--
+
     __debug = true
-    game_Width, game_Height = 1080, 720 --fixed game resolution
+    game_Width, game_Height = 1080, 720
     wind_Width, wind_Height = love.graphics.getDimensions()
     wind_scale = 0.9
     wind_Width, wind_Height = game_Width * wind_scale, game_Height * wind_scale
 
-    --// TEST DOANG \\--
-    middle_x, middle_y = game_Width / 2, game_Height / 2 -- pakai game_Width/game_Height, bukan wind_
+    middle_x, middle_y = game_Width / 2, game_Height / 2
 
-    local size = 2
-    
-    local tile_width, tile_height = 32, 32
-    local width, height = 10, 10
-    local tilesWidth  = tile_width * width
-    local tilesHeight = tile_height * height
-    tile = library.Tile.new(middle_x - tilesWidth/2, middle_y - tilesHeight/2, width, height, tile_width, tile_height, utility.get_tile("tile_test").layers[2].objects)
-    player = library.Player.new(5, 5) -- Contoh pembuatan player di posisi (5, 5)
+    tile_size_mult = 2
+    tile_data = utility.get_tile("tile_test") -- simpan biar bisa dipake ulang
 
-    --// WINDOW \\--
+    tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
+    recenter_tiles()
+
     library.Push:setupScreen(game_Width, game_Height, wind_Width, wind_Height, {fullscreen = false, resizable = false})
 end
 
+function recenter_tiles()
+    local tile_width, tile_height = tile_data.tilewidth * tile_size_mult, tile_data.tileheight * tile_size_mult
+    local tilesWidth, tilesHeight = tile_data.width * tile_width, tile_data.height * tile_height
+
+    tiles.x = middle_x - tilesWidth/2
+    tiles.y = middle_y - tilesHeight/2 + tile_height
+end
+
 function love.keypressed(key)
-    -- // QUIT \\--
     if key == "escape" then
         love.event.quit()
     end
 
-    --// LIBRARIES \\--
-    player:began__input(key)
+    if key == "up" then
+        tile_size_mult = tile_size_mult + 0.1
+        recenter_tiles()
+    elseif key == "down" then
+        tile_size_mult = tile_size_mult - 0.1
+        recenter_tiles()
+    end
 end
 
 function love.update()
@@ -50,7 +54,7 @@ end
 
 function love.draw()
     library.Push:start()
-        tile:draw()
-        player:draw()
+        tiles:draw()
+        -- player:draw()
     library.Push:finish()
 end
