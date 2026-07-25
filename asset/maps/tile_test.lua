@@ -1349,7 +1349,7 @@ return {
         {
           id = 100,
           name = "",
-          type = "floor",
+          type = "desk",
           shape = "rectangle",
           x = 288,
           y = 64,
@@ -1377,7 +1377,7 @@ return {
         {
           id = 102,
           name = "",
-          type = "floor",
+          type = "desk",
           shape = "rectangle",
           x = 288,
           y = 128,
@@ -1405,7 +1405,7 @@ return {
         {
           id = 104,
           name = "",
-          type = "floor",
+          type = "desk",
           shape = "rectangle",
           x = 288,
           y = 192,
@@ -1433,7 +1433,7 @@ return {
         {
           id = 106,
           name = "",
-          type = "floor",
+          type = "desk",
           shape = "rectangle",
           x = 288,
           y = 256,

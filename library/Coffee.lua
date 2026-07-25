@@ -11,7 +11,7 @@ end
 
 function coffees:move()
     if not self.cooldown.active then
-        if self.cooldown.duration <= 0 then
+        if self.cooldown.duration <= 1 then
             print("Coffee is ready to be drunk again at position: (" .. self.x .. ", " .. self.y .. ")")
             self.cooldown.active = true
         else

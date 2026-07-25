@@ -10,10 +10,13 @@ function tile.new(pos_x, pos_y, tiles)
         error("No tiles provided for the tile map.")
     end
 
+    self.desks = {}
     self.coffees = {}
     for i, tile in ipairs(self.tiles) do
         if tile.type == "coffee" then
             table.insert(self.coffees, library.Coffee.new(tile.x, tile.y))
+        elseif tile.type == "desk" then
+            table.insert(self.desks, library.Table.new(tile.x, tile.y))
         end
     end
 
@@ -50,7 +53,7 @@ function tile.new(pos_x, pos_y, tiles)
                 love.graphics.setColor(0.5, 0.5, 0.5)
             elseif tile.type == "coffee" then
                 love.graphics.setColor(0.6, 0.3, 0)
-            elseif tile.type == "table" then
+            elseif tile.type == "desk" then
                 love.graphics.setColor(0.3, 0.2, 0)
             else
                 love.graphics.setColor(1, 1, 1)

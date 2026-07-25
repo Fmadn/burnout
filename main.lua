@@ -14,12 +14,11 @@ function love.load()
 
     tile_size_mult = 2
     tile_data = utility.get_tile("tile_test") -- simpan biar bisa dipake ulang
-
-    tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
-    recenter_tiles()
-    player = library.Player.new(0, 0, 100)
+    time = 0
 
     library.Push:setupScreen(game_Width, game_Height, wind_Width, wind_Height, {fullscreen = false, resizable = false})
+
+    _start__session()
 end
 
 function recenter_tiles()
@@ -42,21 +41,37 @@ function love.keypressed(key)
         tile_size_mult = tile_size_mult - 0.1
         recenter_tiles()
     end
-
-    player:began__input(key)
+    
+    if player then
+        player:began__input(key)
+    end
 end
 
-function love.update()
-    
+function love.update(dt)
+    time = time + dt
+    if tiles then
+        for _, table in pairs(tiles.desks) do
+            table:update(dt)
+        end
+    end
 end
 
 function love.draw()
     library.Push:start()
-        tiles:draw()
-        player:draw()
-        -- coffee
-        for _, coffee in pairs(tiles.coffees) do
-            coffee:draw()
+        if tiles and player then
+            tiles:draw()
+            player:draw()
+            -- coffee
+            for _, coffee in pairs(tiles.coffees) do
+                coffee:draw()
+            end
         end
     library.Push:finish()
+end
+
+--// CUSTOM FUNCTIONS
+function _start__session()
+    tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
+    recenter_tiles()
+    player = library.Player.new(0, 0, 100)
 end

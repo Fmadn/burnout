@@ -18,6 +18,20 @@ local function get_coffee_at_position(x, y)
     return nil
 end
 
+local function get_desk_at_position(x, y)
+    for i, desk in ipairs(tiles.desks) do
+        local desk_width = tile_data.tileWidth or 32
+        local desk_height = tile_data.tileHeight or 32
+        local desk_x, desk_y = desk.x / desk_width,  desk.y / desk_height
+        
+        
+        if desk_x == x and desk_y == y then
+            return desk
+        end
+    end
+    return nil
+end
+
 --[=[
     Bikin player di grid tertentu.
     x atau y gak boleh lebih dari width grid, height grid atau kurang dari 0.
@@ -39,6 +53,9 @@ function Players.new(x,y, energy)
     self.x = x or 0
     self.y = y or 0
     self.energy = energy or 100
+
+    self.__game = {}
+    self.__game.time = "morning" -- "morning":1, "afternoon":0.5, "night":0.2
 
     -- Properti dasar
     self.__status = "active" -- "active" | "gameover"
@@ -84,18 +101,22 @@ function Players:move(dx, dy)
 
     -- Check next tile type
     local coffee = get_coffee_at_position(newX, newY)
+    local desk = get_desk_at_position(newX, newY)
     local next_tile_type = tiles:get_TileType(newX, newY)
     if next_tile_type == "wall" then
         print("Cannot move to a wall tile at: (" .. newX .. ", " .. newY .. ")")
         return
     elseif next_tile_type == "coffee" then
-        -- self.energy = self.energy + 5
         if coffee then
             coffee:drink()
         end
         return
+    elseif next_tile_type == "desk" then
+        if desk then
+            desk:work()
+        end
+        return
     end
-    
     -- Check bounds
     if is_inside(0, 0, tile_data.width-1, tile_data.height-1, newX, newY) then
         self.energy = self.energy - 1
