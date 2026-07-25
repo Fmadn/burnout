@@ -16,6 +16,19 @@ function tile.new(pos_x, pos_y, tiles)
         end
     end
 
+    function self:get_TileType(x, y)
+        for i, tile in ipairs(self.tiles) do
+            local tile_width = tile.width or 32
+            local tile_height = tile.height or 32
+            local tile_x = tile.x / tile_width
+            local tile_y = tile.y / tile_height
+            if tile_x == x and tile_y == y then
+                return tile.type
+            end
+        end
+        return "nil" -- Return nil if no tile is found at the given coordinates
+    end
+
     function self:draw()
         love.graphics.setColor(1, 1, 1, 1)
 

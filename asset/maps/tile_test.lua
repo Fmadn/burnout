@@ -201,7 +201,7 @@ return {
         {
           id = 18,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 32,
           y = 32,
@@ -215,7 +215,7 @@ return {
         {
           id = 19,
           name = "",
-          type = "wall",
+          type = "coffee",
           shape = "rectangle",
           x = 64,
           y = 32,
@@ -257,7 +257,7 @@ return {
         {
           id = 22,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 160,
           y = 32,
@@ -285,7 +285,7 @@ return {
         {
           id = 24,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 224,
           y = 32,
@@ -453,7 +453,7 @@ return {
         {
           id = 36,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 32,
           y = 96,
@@ -481,7 +481,7 @@ return {
         {
           id = 38,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 96,
           y = 96,
@@ -537,7 +537,7 @@ return {
         {
           id = 42,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 224,
           y = 96,
@@ -635,7 +635,7 @@ return {
         {
           id = 49,
           name = "",
-          type = "wall",
+          type = "floor",
           shape = "rectangle",
           x = 160,
           y = 128,
@@ -705,7 +705,7 @@ return {
         {
           id = 54,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 32,
           y = 160,
@@ -733,7 +733,7 @@ return {
         {
           id = 56,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 96,
           y = 160,
@@ -761,7 +761,7 @@ return {
         {
           id = 58,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 160,
           y = 160,
@@ -789,7 +789,7 @@ return {
         {
           id = 60,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 224,
           y = 160,
@@ -957,7 +957,7 @@ return {
         {
           id = 72,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 32,
           y = 224,
@@ -985,7 +985,7 @@ return {
         {
           id = 74,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 96,
           y = 224,
@@ -1013,7 +1013,7 @@ return {
         {
           id = 76,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 160,
           y = 224,
@@ -1041,7 +1041,7 @@ return {
         {
           id = 78,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 224,
           y = 224,
@@ -1209,7 +1209,7 @@ return {
         {
           id = 90,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 32,
           y = 288,
@@ -1237,7 +1237,7 @@ return {
         {
           id = 92,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 96,
           y = 288,
@@ -1265,7 +1265,7 @@ return {
         {
           id = 94,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 160,
           y = 288,
@@ -1293,7 +1293,7 @@ return {
         {
           id = 96,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 224,
           y = 288,
@@ -1335,7 +1335,7 @@ return {
         {
           id = 99,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 288,
           y = 32,
@@ -1363,7 +1363,7 @@ return {
         {
           id = 101,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 288,
           y = 96,
@@ -1391,7 +1391,7 @@ return {
         {
           id = 103,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 288,
           y = 160,
@@ -1419,7 +1419,7 @@ return {
         {
           id = 105,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 288,
           y = 224,
@@ -1447,7 +1447,7 @@ return {
         {
           id = 107,
           name = "",
-          type = "floor",
+          type = "wall",
           shape = "rectangle",
           x = 288,
           y = 288,

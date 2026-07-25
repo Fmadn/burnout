@@ -56,6 +56,16 @@ function Players:move(dx, dy)
         self:set__status("Gameover")
         return
     end
+
+    -- Check next tile type
+    local next_tile_type = tiles:get_TileType(newX, newY)
+    if next_tile_type == "wall" then
+        print("Cannot move to a wall tile at: (" .. newX .. ", " .. newY .. ")")
+        return
+    elseif next_tile_type == "coffee" then
+        self.energy = self.energy + 5
+        return
+    end
     
     -- Check bounds
     if is_inside(0, 0, tile_data.width-1, tile_data.height-1, newX, newY) then

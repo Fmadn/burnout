@@ -44,10 +44,6 @@ end
     function self:draw()
         local tile_width = self.tile_width
         local tile_height = self.tile_height
-
-        -- for i, tile in ipairs(self.tiles) do
-        --     love.graphics.rectangle("line", (tile.x-1)*size+self.x, (tile.y-1)*size+self.y, size, size)
-        -- end
         for i, tile in ipairs(self.tiles) do
             if tile.type == "floor" then
                 love.graphics.setColor(0.5, 0.5, 0.5) -- Grey for floor
