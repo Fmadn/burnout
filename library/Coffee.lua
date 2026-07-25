@@ -9,12 +9,11 @@ function coffees.new(pos_x, pos_y)
     return self
 end
 
-function coffees:move() 
+function coffees:move()
     if not self.cooldown.active then
         if self.cooldown.duration <= 0 then
             print("Coffee is ready to be drunk again at position: (" .. self.x .. ", " .. self.y .. ")")
             self.cooldown.active = true
-            -- self.cooldown.duration = 10 -- reset cooldown duration
         else
             print("Coffee is on cooldown. Please wait.")
             self.cooldown.duration = self.cooldown.duration - 1

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="108">
  <editorsettings>
-  <export target="../asset/maps/tile-test.lua" format="lua"/>
+  <export target="../asset/maps/tile_test.lua" format="lua"/>
  </editorsettings>
  <layer id="1" name="Layer1" width="10" height="10">
   <data encoding="csv">
