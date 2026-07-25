@@ -1,10 +1,10 @@
 local utility = {}
 utility.Enum = {
     MoveDirection = {
-        Up = {0,1},
-        Down = {0,-1},
-        Left = {-1,0},
-        Right = {1,0}
+        up = {0,1},
+        down = {0,-1},
+        left = {-1,0},
+        right = {1,0}
     }
 }
 
@@ -17,6 +17,25 @@ function utility.get_format(filename)
     local extension = filename:match("^.+%.(.+)$")
     local name = filename:match("(.+)%..+")
     return extension, name
+end
+
+--[=[
+    Mengkorvesi input WASD dalam bentuk arah gerak
+    Enum.MoveDirection
+    @param key: string
+]=]
+function utility.get_move_direction(key)
+    if key == "w" then
+        return utility.Enum.MoveDirection.up
+    elseif key == "s" then
+        return utility.Enum.MoveDirection.down
+    elseif key == "a" then
+        return utility.Enum.MoveDirection.left
+    elseif key == "d" then
+        return utility.Enum.MoveDirection.right
+    else
+        return nil
+    end
 end
 
 --[=[

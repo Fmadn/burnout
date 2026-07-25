@@ -26,9 +26,20 @@ function love.load()
     local tileWidth  = size * width
     local tileHeight = size * height
     tile = library.Tile.new(middle_x - tileWidth/2, middle_y - tileHeight/2, width, height, size)
+    player = library.Player.new(5, 5) -- Contoh pembuatan player di posisi (5, 5)
 
     --// WINDOW \\--
     library.Push:setupScreen(game_Width, game_Height, wind_Width, wind_Height, {fullscreen = false, resizable = false})
+end
+
+function love.keypressed(key)
+    -- // QUIT \\--
+    if key == "escape" then
+        love.event.quit()
+    end
+
+    --// LIBRARIES \\--
+    player:began__input(key)
 end
 
 function love.update()
@@ -38,5 +49,6 @@ end
 function love.draw()
     library.Push:start()
         tile:draw()
+        player:draw()
     library.Push:finish()
 end
