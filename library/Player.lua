@@ -66,8 +66,10 @@ function Players.new(x,y, energy)
 end
 
 function Players:update(dt)
+    if self.__status == "gameover" or self.__status == "finish" then
+        return end
     if self.cooldown[2] then
-        if self.cooldown[1] > 0.05 then
+        if self.cooldown[1] > (0.15 * utility.day_to_num(_game.time_s)) then
             self.cooldown[1] = 0
             self.cooldown[2] = false
         else
@@ -81,6 +83,8 @@ end
 function Players:began__input(key)
     -- ketika input ditekan
     -- dan buat gerak jjuga bisa
+    if self.__status == "gameover" or self.__status == "finish" then
+        return end
     local move_direction = utility.get_move_direction(key)
     if move_direction then
         local dx, dy = move_direction[1], move_direction[2]
@@ -94,6 +98,8 @@ end
 
 function Players:add__energy(amount)
     -- pastikan nilainya gak lebih dari 100 dan kurang dari 0
+    if self.__status == "gameover" or self.__status == "finish" then
+        return end
     if self.energy + amount > 100 then
         self.energy = 100
     elseif self.energy + amount < 0 then
@@ -106,6 +112,9 @@ end
 function Players:move(dx, dy)
     local newX = self.x + dx
     local newY = self.y + dy
+
+    if self.__status == "gameover" or self.__status == "finish" then
+        return end
 
     if self.cooldown[2] then
         return
@@ -153,13 +162,22 @@ function Players:move(dx, dy)
     
 end
 
+function Players:get__status()
+    return self.__status
+end
+
 function Players:set__status(status)
     if string.lower(status) == "gameover" then
         self.__status = "gameover"
+        _game.game_over = true
+    elseif string.lower(status) == "finish" then
+        self.__status = "finish"
+        self = nil
     end
 end
 
 function Players:draw()
+    if self.__status == "finish" then return end
     if self.__status == "gameover" then
         love.graphics.print("Game Over", 10, 30, 0, 2, 2)
         return

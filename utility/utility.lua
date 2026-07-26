@@ -39,6 +39,42 @@ function utility.get_move_direction(key)
 end
 
 --[=[
+    Merubah waktu dari string
+    menjadi bentuk angkanya.
+
+    @param time: string
+    @return time: number
+]=]
+function utility.day_to_num(time)
+    time = string.lower(time)
+    return time == "morning" and 1 or time == "afternoon" and 0.5 or time == "night" and 0.25
+end
+
+--[=[
+    Ubah total_time jadi format
+    jam palsu, mulai dari 07:00
+    sampai ke 20:00
+]=]
+function utility.time_to_clock(time)
+
+    --// CONFIGURATIONS \\ --
+    local start_hour = 7
+    local end_hour = 20
+    --// \\ // \\ // \\ \\--
+
+    local progress = time / _game.total_time              -- 0.0 - 1.0
+    progress = math.clamp and math.clamp(progress, 0, 1) or math.min(math.max(progress, 0), 1)
+
+    local total_minutes_range = (end_hour - start_hour) * 60  -- 13 jam = 780 menit
+    local current_minutes = (start_hour * 60) + (progress * total_minutes_range)
+
+    local hour = math.floor(current_minutes / 60)
+    local minute = math.floor(current_minutes % 60)
+
+    return string.format("%02d:%02d", hour, minute)
+end
+
+--[=[
     Ambil sebuah file tile hanya
     lewat nama.
 

@@ -1,7 +1,7 @@
 local desks = {}
 
 local function random_next()
-    return love.math.random(7, 20) * 1
+    return love.math.random(5, 20) * utility.day_to_num(_game.time_s)
 end
 
 function desks.new(x,y)
@@ -20,31 +20,43 @@ end
 
 function desks:add__job()
     self.elapsed_time = 0
+    self.waiting_time = 0
     self.requesting = true
     self.next_job = random_next()
 end
 
 function desks:update(dt)
-    if not self.requesting then
-        if self.elapsed_time > self.next_job then
-            self:add__job()
+    if player:get__status() == "gameover" then
+        return
+    end
+        if not self.requesting then
+            if self.elapsed_time > self.next_job then
+                self:add__job()
+            else
+                self.elapsed_time = self.elapsed_time + dt
+            end
         else
-            self.elapsed_time = self.elapsed_time + dt
-        end
-    else
-        self.elapsed_time = 0
-        self.waiting_time = self.waiting_time + dt
-        if self.waiting_time > 5 then
-            self.requesting = false
-        end
+            self.elapsed_time = 0
+            self.waiting_time = self.waiting_time + dt
+            if self.waiting_time > 5 then
+                
+                if _game.attempt - 1 <= 0 then
+                    player:set__status("gameover")
+                end
+                _game.attempt = _game.attempt - 1
+
+                self.waiting_time = 0
+                self.requesting = false
+                -- self = nil
+            end
     end
 end
 
 function desks:work()
     if self.requesting then
-        print("Kerja!")
+        player:add__energy(-5)
         self.requesting = false
-        self = nil
+        -- self = nil
     end
 end
 

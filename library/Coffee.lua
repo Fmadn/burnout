@@ -49,9 +49,9 @@ function coffees:drink()
         return
     end
     print("Minum kopi di posisi: (" .. self.x .. ", " .. self.y .. ")")
-    player:add__energy(15)
+    player:add__energy(30)
     self.cooldown.active = false
-    self.cooldown.duration = 10
+    self.cooldown.duration = 20
 end
 
 return coffees

@@ -13,12 +13,35 @@ function love.load()
     middle_x, middle_y = game_Width / 2, game_Height / 2
 
     tile_size_mult = 2
+
+    _game = {}
+    _game.total_time = 60
+
+    _game.__times = {
+        morning   = _game.total_time / 3,           -- 3
+        afternoon = (_game.total_time / 3) * 2,     -- 6
+        night     = _game.total_time,               -- 9
+    }
+
+    function _game.get_phase(time)
+        if time < _game.__times.morning then
+            return "morning"
+        elseif time < _game.__times.afternoon then
+            return "afternoon"
+        else
+            return "night"
+        end
+    end
+    _game.time = 0
+    _game.time_s = "morning"
+    _game.attempt = 3
+    _game.game_over = false
+
     tile_data = utility.get_tile("tile_test") -- simpan biar bisa dipake ulang
-    time = 0
 
     library.Push:setupScreen(game_Width, game_Height, wind_Width, wind_Height, {fullscreen = false, resizable = false})
 
-    _start__session()
+    -- _start__session()
 end
 
 function recenter_tiles()
@@ -32,6 +55,10 @@ end
 function love.keypressed(key)
     if key == "escape" then
         love.event.quit()
+    end
+
+    if key == "space" then
+        _start__session()
     end
 
     if key == "up" then
@@ -48,13 +75,24 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
-    time = time + dt
-    if tiles then
-        for _, table in pairs(tiles.desks) do
-            table:update(dt)
+    if tiles and player then
+        if not _game.game_over then
+            if _game.time >= _game.total_time then
+                _game.game_over = true
+                player:set__status("finish")
+            else
+                _game.time = _game.time + dt
+                _game.time_s = _game.get_phase(_game.time)
+            end
         end
-    end
-    if player then
+
+        for i = #tiles.desks, 1, -1 do
+            local desk = tiles.desks[i]
+            desk:update(dt)
+            if player:get__status() == "gameover" or _game.game_over then
+                table.remove(tiles.desks, i)
+            end
+        end
         player:update(dt)
     end
 end
@@ -72,6 +110,7 @@ function love.draw()
                 desk:draw()
             end
         end
+        love.graphics.print(utility.time_to_clock(_game.time), 100, 200, 0, 4, 4)
     library.Push:finish()
 end
 
@@ -79,5 +118,9 @@ end
 function _start__session()
     tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
     recenter_tiles()
+    _game.attempt = 3
+    _game.game_over =false
+    _game.time = 0
+    _game.time_s = "morning" 
     player = library.Player.new(5, 4, 100)
 end
