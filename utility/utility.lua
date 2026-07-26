@@ -47,7 +47,21 @@ end
 ]=]
 function utility.day_to_num(time)
     time = string.lower(time)
-    return time == "morning" and 1 or time == "afternoon" and 0.5 or time == "night" and 0.25
+    return time == "morning" and 1 or time == "afternoon" and 0.75 or time == "night" and 0.5
+end
+
+--[=[
+    getarkan dua nilai.
+
+    @param x: number
+    @param y: number
+    @param rang_min: number
+    @param rang_max: number
+
+    @return x, y: number, number
+]=]
+function utility.shake(x,y, rang_min, rang_max)
+    return math.random(rang_min, rang_max) + x, math.random(rang_min, rang_max) + y
 end
 
 --[=[
@@ -79,7 +93,7 @@ end
     berulang kali. Buat tween
     atau memperhalus aja....
 ]=]
-function lerp(a, b, t)
+function utility.lerp(a, b, t)
     return a + (b - a) * t
 end
 

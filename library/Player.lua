@@ -62,12 +62,31 @@ function Players.new(x,y, energy)
     -- Properti dasar
     self.__status = "active" -- "active" | "gameover"
 
+    self.__style = {}
+    self.__style.x = self.x
+    self.__style.y = self.y
+    self.__style.grids = {
+        idle = library.Anim8.newGrid(24,24,images.airla:getWidth(), images.airla:getHeight())
+    }
+    self.__style.animations = {
+        idle = library.Anim8.newAnimation(self.__style.grids.idle('1-2',1),0.2)
+    }
+
     return self
 end
 
 function Players:update(dt)
+    self.__style.x = utility.lerp(self.__style.x, self.x, dt*10)
+    self.__style.y = utility.lerp(self.__style.y, self.y, dt*10)
+    
+    for _, anim in pairs(self.__style.animations) do
+        anim:update(dt)
+    end
+    
     if self.__status == "gameover" or self.__status == "finish" then
-        return end
+        return
+    end
+
     if self.cooldown[2] then
         if self.cooldown[1] > (0.15 * utility.day_to_num(_game.time_s)) then
             self.cooldown[1] = 0
@@ -172,24 +191,43 @@ function Players:set__status(status)
         _game.game_over = true
     elseif string.lower(status) == "finish" then
         self.__status = "finish"
-        self = nil
+        -- self = nil
     end
 end
 
 function Players:draw()
     if self.__status == "finish" then return end
     if self.__status == "gameover" then
-        love.graphics.print("Game Over", 10, 30, 0, 2, 2)
+        love.graphics.print(self.__style.x)
         return
     end
-    -- ENERGY
+
     love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
 
     local width, height = tile_data.tilewidth * tile_size_mult, tile_data.tileheight * tile_size_mult
     local size = math.min(width, height)
-    love.graphics.setColor(1, 0, 0) -- Set color to red for the player
-    love.graphics.rectangle("fill", (self.x)*size + tiles.x, (self.y-1)*size + tiles.y, size, size)
-    love.graphics.setColor(1, 1, 1) -- Reset color to white
+
+    local drawX = (self.__style.x)*size + tiles.x
+    local drawY = (self.__style.y-1)*size + tiles.y
+
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("line", drawX, drawY, size, size)
+    love.graphics.setColor(1, 1, 1)
+
+    local frame_width, frame_height = 24, 24  -- sesuai grid Anim8 kamu
+    local scale = 2.5
+
+    local scaled_width  = frame_width * scale
+    local scaled_height = frame_height * scale
+
+    -- center di tengah tile (X dan Y)
+    local offsetX = (size - scaled_width) / 2
+    local offsetY = (size - scaled_height) / 2
+
+    local finalX = drawX + offsetX
+    local finalY = drawY + offsetY
+
+    self.__style.animations.idle:draw(images.airla, finalX, finalY, nil, scale, scale)
 end
 
 return Players

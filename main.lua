@@ -1,8 +1,13 @@
 function love.load()
     utility = require("utility/utility")
 
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
     library = {}
     library = utility.load__library("library")
+
+    images = {}
+    images.airla = love.graphics.newImage("asset/image/airla/AnimationSheet.png")
 
     -- __debug = true
     game_Width, game_Height = 1080, 720
