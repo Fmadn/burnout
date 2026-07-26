@@ -264,9 +264,11 @@ function love.draw()
         end
 
         if _game.intitle then
+            love.graphics.rectangle('fill',0,0,game_Width,game_Height)
             local title_x,title_y = utility.shake(100, 100, -1, 1)
             love.graphics.draw(images.logo, title_x, title_y, 0, 0.5,0.5)
             love.graphics.setFont(fonts.w95f)
+            love.graphics.setColor(0.25,0.25,0.25,1)
             if math.floor(TICK) % 2 == 0 then
                 love.graphics.print("PRESS [ANY] TO START", 140, images.logo:getHeight()-50)
             end
