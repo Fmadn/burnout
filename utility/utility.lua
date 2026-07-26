@@ -110,6 +110,40 @@ function utility.get_tile(tile_name)
 end
 
 --[=[
+    Ambil nama file tilemap secara random dari folder asset/maps.
+    @return string -- nama file tanpa extension (siap dipakai di utility.get_tile)
+]=]
+function utility.get_random_map_name()
+    local map_folder = "asset/maps"
+    local files = love.filesystem.getDirectoryItems(map_folder)
+
+    local valid_maps = {}
+    for _, file in ipairs(files) do
+        -- filter cuma file map (misal .lua), buang yang lain
+        local name, ext = file:match("(.+)%.(%w+)$")
+        if ext == "lua" then -- FIX: sesuaikan extension sama format tilemap kamu (lua/json/dll)
+            table.insert(valid_maps, name)
+        end
+    end
+
+    if #valid_maps == 0 then
+        error("No tilemap found in " .. map_folder)
+    end
+
+    local random_index = love.math.random(1, #valid_maps)
+    return valid_maps[random_index]
+end
+
+--[=[
+    Ambil tile data random langsung, gabungan get_random_map_name + get_tile.
+    @return table -- tile_data siap pakai
+]=]
+function utility.get_random_tile()
+    local map_name = utility.get_random_map_name()
+    return utility.get_tile(map_name)
+end
+
+--[=[
     Cek semua library
     dan load semuanya.
 

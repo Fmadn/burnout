@@ -1,7 +1,7 @@
 local desks = {}
 
 local function random_next()
-    return love.math.random(15,20) * utility.day_to_num(_game.time_s)
+    return love.math.random(5, 60) * utility.day_to_num(_game.time_s)
 end
 
 function desks.new(x,y)
@@ -14,6 +14,7 @@ function desks.new(x,y)
 
     self.waiting_time = 0
     self.elapsed_time = 0
+    self.__sound = nil
 
     return self
 end
@@ -23,6 +24,8 @@ function desks:add__job()
     self.waiting_time = 0
     self.requesting = true
     self.next_job = random_next()
+    self.__sound = sounds.notification:clone()
+    self.__sound:play()
 end
 
 function desks:update(dt)
@@ -38,7 +41,7 @@ function desks:update(dt)
         else
             self.elapsed_time = 0
             self.waiting_time = self.waiting_time + dt
-            if self.waiting_time > 5 then
+            if self.waiting_time > 10 then
                 
                 if _game.attempt - 1 <= 0 then
                     player:set__status("gameover")
@@ -64,6 +67,9 @@ function desks:work()
         player:add__energy(-2)
         local work_sound = sounds.work:clone()
         work_sound:play()
+        if self.__sound then
+            self.__sound:stop() 
+        end
         self.requesting = false
         player.__job_completed = player.__job_completed + 1
 

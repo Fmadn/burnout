@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="108">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="109">
  <editorsettings>
-  <export target="../asset/maps/tile_test.lua" format="lua"/>
+  <export target="../asset/maps/tile5.lua" format="lua"/>
  </editorsettings>
  <layer id="1" name="Layer1" width="10" height="10">
   <data encoding="csv">
@@ -25,14 +25,14 @@
   <object id="9" type="floor" x="128" y="0" width="32" height="32"/>
   <object id="10" type="floor" x="160" y="0" width="32" height="32"/>
   <object id="11" type="floor" x="192" y="0" width="32" height="32"/>
-  <object id="12" type="floor" x="224" y="0" width="32" height="32"/>
-  <object id="13" type="floor" x="256" y="0" width="32" height="32"/>
+  <object id="12" type="wall" x="224" y="0" width="32" height="32"/>
+  <object id="13" type="coffee" x="256" y="0" width="32" height="32"/>
   <object id="17" type="floor" x="0" y="32" width="32" height="32"/>
-  <object id="18" type="wall" x="32" y="32" width="32" height="32"/>
-  <object id="19" type="coffee" x="64" y="32" width="32" height="32"/>
-  <object id="20" type="wall" x="96" y="32" width="32" height="32"/>
+  <object id="18" type="desk" x="32" y="32" width="32" height="32"/>
+  <object id="19" type="floor" x="64" y="32" width="32" height="32"/>
+  <object id="20" type="desk" x="96" y="32" width="32" height="32"/>
   <object id="21" type="floor" x="128" y="32" width="32" height="32"/>
-  <object id="22" type="wall" x="160" y="32" width="32" height="32"/>
+  <object id="22" type="desk" x="160" y="32" width="32" height="32"/>
   <object id="23" type="floor" x="192" y="32" width="32" height="32"/>
   <object id="24" type="wall" x="224" y="32" width="32" height="32"/>
   <object id="25" type="floor" x="256" y="32" width="32" height="32"/>
@@ -43,14 +43,14 @@
   <object id="30" type="floor" x="128" y="64" width="32" height="32"/>
   <object id="31" type="floor" x="160" y="64" width="32" height="32"/>
   <object id="32" type="floor" x="192" y="64" width="32" height="32"/>
-  <object id="33" type="floor" x="224" y="64" width="32" height="32"/>
+  <object id="33" type="wall" x="224" y="64" width="32" height="32"/>
   <object id="34" type="floor" x="256" y="64" width="32" height="32"/>
   <object id="35" type="floor" x="0" y="96" width="32" height="32"/>
-  <object id="36" type="wall" x="32" y="96" width="32" height="32"/>
+  <object id="36" type="desk" x="32" y="96" width="32" height="32"/>
   <object id="37" type="floor" x="64" y="96" width="32" height="32"/>
-  <object id="38" type="wall" x="96" y="96" width="32" height="32"/>
+  <object id="38" type="desk" x="96" y="96" width="32" height="32"/>
   <object id="39" type="floor" x="128" y="96" width="32" height="32"/>
-  <object id="40" type="wall" x="160" y="96" width="32" height="32"/>
+  <object id="40" type="desk" x="160" y="96" width="32" height="32"/>
   <object id="41" type="floor" x="192" y="96" width="32" height="32"/>
   <object id="42" type="wall" x="224" y="96" width="32" height="32"/>
   <object id="43" type="floor" x="256" y="96" width="32" height="32"/>
@@ -61,16 +61,15 @@
   <object id="48" type="floor" x="128" y="128" width="32" height="32"/>
   <object id="49" type="floor" x="160" y="128" width="32" height="32"/>
   <object id="50" type="floor" x="192" y="128" width="32" height="32"/>
-  <object id="51" type="floor" x="224" y="128" width="32" height="32"/>
+  <object id="51" type="wall" x="224" y="128" width="32" height="32"/>
   <object id="52" type="floor" x="256" y="128" width="32" height="32"/>
   <object id="53" type="floor" x="0" y="160" width="32" height="32"/>
-  <object id="54" type="wall" x="32" y="160" width="32" height="32"/>
+  <object id="54" type="floor" x="32" y="160" width="32" height="32"/>
   <object id="55" type="floor" x="64" y="160" width="32" height="32"/>
-  <object id="56" type="wall" x="96" y="160" width="32" height="32"/>
   <object id="57" type="floor" x="128" y="160" width="32" height="32"/>
-  <object id="58" type="wall" x="160" y="160" width="32" height="32"/>
+  <object id="58" type="floor" x="160" y="160" width="32" height="32"/>
   <object id="59" type="floor" x="192" y="160" width="32" height="32"/>
-  <object id="60" type="wall" x="224" y="160" width="32" height="32"/>
+  <object id="60" type="floor" x="224" y="160" width="32" height="32"/>
   <object id="61" type="floor" x="256" y="160" width="32" height="32"/>
   <object id="62" type="floor" x="0" y="192" width="32" height="32"/>
   <object id="63" type="floor" x="32" y="192" width="32" height="32"/>
@@ -82,13 +81,13 @@
   <object id="69" type="floor" x="224" y="192" width="32" height="32"/>
   <object id="70" type="floor" x="256" y="192" width="32" height="32"/>
   <object id="71" type="floor" x="0" y="224" width="32" height="32"/>
-  <object id="72" type="wall" x="32" y="224" width="32" height="32"/>
+  <object id="72" type="floor" x="32" y="224" width="32" height="32"/>
   <object id="73" type="floor" x="64" y="224" width="32" height="32"/>
-  <object id="74" type="wall" x="96" y="224" width="32" height="32"/>
+  <object id="74" type="floor" x="96" y="224" width="32" height="32"/>
   <object id="75" type="floor" x="128" y="224" width="32" height="32"/>
-  <object id="76" type="wall" x="160" y="224" width="32" height="32"/>
+  <object id="76" type="floor" x="160" y="224" width="32" height="32"/>
   <object id="77" type="floor" x="192" y="224" width="32" height="32"/>
-  <object id="78" type="wall" x="224" y="224" width="32" height="32"/>
+  <object id="78" type="floor" x="224" y="224" width="32" height="32"/>
   <object id="79" type="floor" x="256" y="224" width="32" height="32"/>
   <object id="80" type="floor" x="0" y="256" width="32" height="32"/>
   <object id="81" type="floor" x="32" y="256" width="32" height="32"/>
@@ -100,23 +99,24 @@
   <object id="87" type="floor" x="224" y="256" width="32" height="32"/>
   <object id="88" type="floor" x="256" y="256" width="32" height="32"/>
   <object id="89" type="floor" x="0" y="288" width="32" height="32"/>
-  <object id="90" type="wall" x="32" y="288" width="32" height="32"/>
+  <object id="90" type="floor" x="32" y="288" width="32" height="32"/>
   <object id="91" type="floor" x="64" y="288" width="32" height="32"/>
-  <object id="92" type="wall" x="96" y="288" width="32" height="32"/>
+  <object id="92" type="floor" x="96" y="288" width="32" height="32"/>
   <object id="93" type="floor" x="128" y="288" width="32" height="32"/>
-  <object id="94" type="wall" x="160" y="288" width="32" height="32"/>
+  <object id="94" type="floor" x="160" y="288" width="32" height="32"/>
   <object id="95" type="floor" x="192" y="288" width="32" height="32"/>
-  <object id="96" type="wall" x="224" y="288" width="32" height="32"/>
+  <object id="96" type="floor" x="224" y="288" width="32" height="32"/>
   <object id="97" type="floor" x="256" y="288" width="32" height="32"/>
-  <object id="98" type="floor" x="288" y="0" width="32" height="32"/>
-  <object id="99" type="wall" x="288" y="32" width="32" height="32"/>
-  <object id="100" type="desk" x="288" y="64" width="32" height="32"/>
-  <object id="101" type="wall" x="288" y="96" width="32" height="32"/>
-  <object id="102" type="desk" x="288" y="128" width="32" height="32"/>
-  <object id="103" type="wall" x="288" y="160" width="32" height="32"/>
-  <object id="104" type="desk" x="288" y="192" width="32" height="32"/>
-  <object id="105" type="wall" x="288" y="224" width="32" height="32"/>
-  <object id="106" type="desk" x="288" y="256" width="32" height="32"/>
-  <object id="107" type="wall" x="288" y="288" width="32" height="32"/>
+  <object id="98" type="coffee" x="288" y="0" width="32" height="32"/>
+  <object id="99" type="floor" x="288" y="32" width="32" height="32"/>
+  <object id="100" type="floor" x="288" y="64" width="32" height="32"/>
+  <object id="101" type="floor" x="288" y="96" width="32" height="32"/>
+  <object id="102" type="floor" x="288" y="128" width="32" height="32"/>
+  <object id="103" type="floor" x="288" y="160" width="32" height="32"/>
+  <object id="104" type="floor" x="288" y="192" width="32" height="32"/>
+  <object id="105" type="floor" x="288" y="224" width="32" height="32"/>
+  <object id="106" type="floor" x="288" y="256" width="32" height="32"/>
+  <object id="107" type="floor" x="288" y="288" width="32" height="32"/>
+  <object id="108" type="floor" x="96" y="160" width="32" height="32"/>
  </objectgroup>
 </map>

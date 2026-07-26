@@ -71,11 +71,11 @@ function Players.new(x,y, energy)
     self.__style.width = images.airla:getWidth()
     self.__style.height = images.airla:getHeight()
     self.__style.grids = {
-        airla = library.Anim8.newGrid(24,24,images.airla:getWidth(), images.airla:getHeight())
+        airla = library.Anim8.newGrid(128,128,images.airla:getWidth(), images.airla:getHeight())
     }
     self.__style.animations = {
         idle = library.Anim8.newAnimation(self.__style.grids.airla('1-2',1),0.2),
-        died = library.Anim8.newAnimation(self.__style.grids.airla('7-8',5), 0.2)
+        died = library.Anim8.newAnimation(self.__style.grids.airla('1-2',1), 0.2)
     }
 
     return self
@@ -87,8 +87,8 @@ function Players:update(dt)
     end
 
     if self.__status == "gameover" or self.__status == "finish" then
-        local target_x = (game_Width - 24*2.5) / 2
-        local target_y = (game_Height - 24*2.5) / 2
+        local target_x = (game_Width - 128*0.5) / 2
+        local target_y = (game_Height - 128*0.5) / 2
         self.__style.x = utility.lerp(self.__style.x, target_x, dt*5)
         self.__style.y = utility.lerp(self.__style.y, target_y, dt*5)
         return
@@ -219,8 +219,17 @@ function Players:set__status(status)
             end
         end
 
+        for name, music in pairs(musics) do
+            if name ~= "gameover" then
+                music.target = 0 -- FIX: fade out, bukan stop()
+            end
+        end
+
+        musics.gameover[1]:setVolume(1)
         musics.gameover[1]:play()
-        musics.gameover[2]=true
+        musics.gameover[2] = true
+        musics.gameover.target = 1
+        musics.gameover.volume = 0
     elseif string.lower(status) == "finish" then
         self.__status = "finish"
     end
@@ -233,8 +242,8 @@ function Players:draw()
     local drawX = (self.__style.x)*size + (tiles.x * game_state)
     local drawY = (self.__style.y-1)*size + (tiles.y* game_state)
 
-    local frame_width, frame_height = 24, 24  -- sesuai grid Anim8 kamu
-    local scale = 2.5
+    local frame_width, frame_height = 128, 128  -- sesuai grid Anim8 kamu
+    local scale = 0.5
 
     local scaled_width  = frame_width * scale
     local scaled_height = frame_height * scale
@@ -267,7 +276,9 @@ function Players:draw()
     end
 
     love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("line", drawX, drawY, size, size)
+    if __debug then
+        love.graphics.rectangle("line", drawX, drawY, size, size)
+    end
     love.graphics.setColor(1, 1, 1)
 
     self.__style.animations.idle:draw(images.airla, finalX, finalY, nil, scale, scale)
@@ -286,13 +297,13 @@ function Players:draw()
     for ox = -stroke_size, stroke_size do
         for oy = -stroke_size, stroke_size do
             if ox ~= 0 or oy ~= 0 then
-                love.graphics.print(self.energy, energy_x + ox, finalY + oy, nil, scale_text, scale_text)
+                love.graphics.print(self.energy, energy_x + ox, finalY + oy +-20, nil, scale_text, scale_text)
             end
         end
     end
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print(self.energy, energy_x, finalY, nil, scale_text, scale_text)
+    love.graphics.print(self.energy, energy_x, finalY+-20, nil, scale_text, scale_text)
 
     love.graphics.setColor(1,0,0, __vignette)
     love.graphics.draw(images.vignette,0,0, nil, 0.56,0.7)
@@ -308,7 +319,7 @@ function Players:draw()
         local urgency = ((3 - _game.attempt) + 1)
         local individual_y = math.sin(_game.time*i) * 5
         local individual_r = math.cos(_game.time*i) * 0.05
-        local shake_x, shake_y = utility.shake((i/2.5)*width-60, 170+individual_y, -urgency, urgency)
+        local shake_x, shake_y = utility.shake((i/20)*width-60, 170+individual_y, -urgency, urgency)
         love.graphics.draw(images.lives, shake_x, shake_y, individual_r, attempt_size)
     end
 end

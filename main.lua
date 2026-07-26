@@ -9,7 +9,7 @@ function love.load()
 
     --// DONT BE SHOCKED.... PLS.. :(
     images = {}
-    images.airla = love.graphics.newImage("asset/image/airla/AnimationSheet.png")
+    images.airla = love.graphics.newImage("asset/image/airla/spritesheet.png")
     images.floor = love.graphics.newImage("asset/image/floor.jpg")
     images.table = love.graphics.newImage("asset/image/table.png")
     images.coffee = love.graphics.newImage("asset/image/coffee.jpg")
@@ -19,6 +19,7 @@ function love.load()
     images.lives = love.graphics.newImage("asset/image/lives.png")
     images.logo = love.graphics.newImage("asset/image/logo.png")
     images.vignette = love.graphics.newImage("asset/image/vignette.png")
+    images.tutorial = love.graphics.newImage("asset/image/tutorial.png")
 
     fonts = {}
     fonts.rust = love.graphics.newFont("asset/font/rust.ttf", 30)
@@ -29,12 +30,14 @@ function love.load()
     sounds.drink = love.audio.newSource("asset/sounds/drink.wav", "static")
     sounds.work = love.audio.newSource("asset/sounds/work.wav", "static")
     sounds.fail = love.audio.newSource("asset/sounds/fail.wav", "static")
+    sounds.notification = love.audio.newSource("asset/sounds/notification.wav", "static")
+    sounds.win = love.audio.newSource("asset/sounds/win.mp3", "static")
 
     musics = {}
-    musics.gameover = {love.audio.newSource("asset/music/gameover.mp3", "stream"), false}
-    musics.morning = {love.audio.newSource("asset/music/morning.mp3", "stream"), false}
-    musics.afternoon = {love.audio.newSource("asset/music/afternoon.mp3", "stream"), false}
-    musics.night = {love.audio.newSource("asset/music/night.mp3", "stream"), false} -- FIX: tambah night
+    musics.gameover  = {love.audio.newSource("asset/music/gameover.mp3", "stream"), false, volume = 0, target = 0}
+    musics.morning   = {love.audio.newSource("asset/music/morning.mp3", "stream"), false, volume = 0, target = 0}
+    musics.afternoon = {love.audio.newSource("asset/music/afternoon.mp3", "stream"), false, volume = 0, target = 0}
+    musics.night     = {love.audio.newSource("asset/music/night.mp3", "stream"), false, volume = 0, target = 0}
     
 
     -- __debug = true
@@ -52,7 +55,7 @@ function love.load()
 
     _game = {}
     _game.finish_time = 0
-    _game.total_time = 3
+    _game.total_time = 200
     _game.intitle = false
 
     _game.__win_texts = {
@@ -79,27 +82,39 @@ function love.load()
     end
 
     function _game.play_BGM()
+        local target_name = _game.time_s -- "morning"/"afternoon"/"night"
+
         for name, music in pairs(musics) do
             if name ~= "gameover" then
-                if music[2] then
+                if name == target_name then
+                    if not music[2] then
+                        music[1]:setLooping(true)
+                        music[1]:setVolume(0)
+                        music[1]:play()
+                        music[2] = true
+                    end
+                    music.target = 1 
+                else
+                    music.target = 0 
+                end
+            end
+        end
+    end
+
+    function _game.update_music_fade(dt)
+        local fade_speed = 1 -- makin gede, makin cepet transisinya (1 = ~1 detik)
+
+        for name, music in pairs(musics) do
+            if name ~= "gameover" then
+                music.volume = utility.lerp(music.volume, music.target, dt * fade_speed)
+                music[1]:setVolume(music.volume)
+
+                -- kalau target 0 dan volume udah nyaris 0, baru bener2 stop
+                if music.target == 0 and music.volume < 0.01 and music[2] then
                     music[1]:stop()
                     music[2] = false
                 end
             end
-        end
-
-        if _game.time_s == "morning" then
-            musics.morning[1]:setLooping(true)
-            musics.morning[1]:play()
-            musics.morning[2] = true
-        elseif _game.time_s == "afternoon" then
-            musics.afternoon[1]:setLooping(true)
-            musics.afternoon[1]:play()
-            musics.afternoon[2] = true
-        elseif _game.time_s == "night" then -- FIX: tambah case night
-            musics.night[1]:setLooping(true)
-            musics.night[1]:play()
-            musics.night[2] = true
         end
     end
 
@@ -109,9 +124,12 @@ function love.load()
     _game.attempt = 3
     _game.game_over = false
 
+    finish_sound = false
+
     fade_alpha = 0
 
-    tile_data = utility.get_tile("tile_test") -- simpan biar bisa dipake ulang
+    -- tile_data = utility.get_tile("tile_test") -- simpan biar bisa dipake ulang
+    tile_data = utility.get_random_tile()
 
     library.Push:setupScreen(game_Width, game_Height, wind_Width, wind_Height, {fullscreen = false, resizable = false})
 
@@ -158,15 +176,18 @@ end
 function love.update(dt)
     TICK = TICK + dt
     if tiles and player then
-        if not _game.game_over then          -- FIX: tambahin balik baris ini
+        if not _game.game_over then
             if _game.time >= _game.total_time then
                 _game.game_over = true
                 player:set__status("finish")
+                if not finish_sound then
+                    finish_sound = true
+                    sounds.win:play()
+                end
 
                 for name, music in pairs(musics) do
-                    if name ~= "gameover" and music[2] then
-                        music[1]:stop()
-                        music[2] = false
+                    if name ~= "gameover" then
+                        music.target = 0
                     end
                 end
             else
@@ -181,6 +202,8 @@ function love.update(dt)
         else
             _game.gameover_time = _game.gameover_time + dt
         end
+
+        _game.update_music_fade(dt) 
 
         if player:get__status() == "finish" then
             _game.finish_time = _game.finish_time + dt
@@ -276,17 +299,17 @@ function love.draw()
 
         
 
-        -- FIX: cuma ini doang overlay-nya, buat transisi start (hitam -> transparan)
         if not _game.intitle and TUTORIAL and player:get__status() == "active" then
-            local tutorial_image = images.wall
+            local tutorial_image = images.tutorial
 
-            local tutorial_scale = 1
+            local tutorial_scale = 0.34
             local tutorial_width, tutorial_height = tutorial_image:getWidth(), tutorial_image:getHeight()
 
             local tutorial_drawX = (game_Width - (tutorial_width * tutorial_scale)) / 2
             local tutorial_drawY = (game_Height - (tutorial_height * tutorial_scale)) / 2
 
-            love.graphics.draw(images.wall, tutorial_drawX, tutorial_drawY)
+            love.graphics.setColor(1,1,1,0.9)
+            love.graphics.draw(tutorial_image, tutorial_drawX, tutorial_drawY, 0, tutorial_scale, tutorial_scale) -- FIX: scale ditambahin di sini
         end
 
         love.graphics.setColor(0, 0, 0, fade_alpha)
@@ -302,6 +325,10 @@ function _start__session()
     tiles = library.Tiler.new(0, 0, tile_data.layers[2].objects)
     recenter_tiles()
 
+    finish_sound = false
+
+    tile_data = utility.get_random_tile()
+
     _game.attempt = 3
     _game.game_over = false
     _game.intitle = false
@@ -314,16 +341,17 @@ function _start__session()
         musics.gameover[1]:stop()
         musics.gameover[2] = false
     end
-
+ 
     for _, entry in ipairs(_game.__win_texts) do
         entry.played = false
     end
 
-    player = library.Player.new(5, 4, 100)
+    local spawnX, spawnY = tile_data.spawnX or 1, tile_data.spawnY or 1
+    player = library.Player.new(spawnX, spawnY, 100)
 
     fade_alpha = 1
 
-    _game.play_BGM() -- FIX: mulai lagu morning pas sesi baru
+    _game.play_BGM()
 end
 
 function _start__titlescreen()
