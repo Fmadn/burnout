@@ -65,27 +65,34 @@ function Players.new(x,y, energy)
     self.__style = {}
     self.__style.x = self.x
     self.__style.y = self.y
+    self.__style.width = images.airla:getWidth()
+    self.__style.height = images.airla:getHeight()
     self.__style.grids = {
-        idle = library.Anim8.newGrid(24,24,images.airla:getWidth(), images.airla:getHeight())
+        airla = library.Anim8.newGrid(24,24,images.airla:getWidth(), images.airla:getHeight())
     }
     self.__style.animations = {
-        idle = library.Anim8.newAnimation(self.__style.grids.idle('1-2',1),0.2)
+        idle = library.Anim8.newAnimation(self.__style.grids.airla('1-2',1),0.2),
+        died = library.Anim8.newAnimation(self.__style.grids.airla('7-8',5), 0.2)
     }
 
     return self
 end
 
 function Players:update(dt)
-    self.__style.x = utility.lerp(self.__style.x, self.x, dt*10)
-    self.__style.y = utility.lerp(self.__style.y, self.y, dt*10)
-    
     for _, anim in pairs(self.__style.animations) do
         anim:update(dt)
     end
-    
+
     if self.__status == "gameover" or self.__status == "finish" then
+        local target_x = (game_Width - 24*2.5) / 2
+        local target_y = (game_Height - 24*2.5) / 2
+        self.__style.x = utility.lerp(self.__style.x, target_x, dt*5)
+        self.__style.y = utility.lerp(self.__style.y, target_y, dt*5)
         return
     end
+
+    self.__style.x = utility.lerp(self.__style.x, self.x, dt*10)
+    self.__style.y = utility.lerp(self.__style.y, self.y, dt*10)
 
     if self.cooldown[2] then
         if self.cooldown[1] > (0.15 * utility.day_to_num(_game.time_s)) then
@@ -189,30 +196,23 @@ function Players:set__status(status)
     if string.lower(status) == "gameover" then
         self.__status = "gameover"
         _game.game_over = true
+
+        local width, height = tile_data.tilewidth * tile_size_mult, tile_data.tileheight * tile_size_mult
+        local size = math.min(width, height)
+
+        self.__style.x = (self.__style.x) * size + tiles.x
+        self.__style.y = (self.__style.y - 1) * size + tiles.y
     elseif string.lower(status) == "finish" then
         self.__status = "finish"
-        -- self = nil
     end
 end
 
 function Players:draw()
-    if self.__status == "finish" then return end
-    if self.__status == "gameover" then
-        love.graphics.print(self.__style.x)
-        return
-    end
-
-    love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
-
+    local game_state = (_game.game_over and 0 or 1)
     local width, height = tile_data.tilewidth * tile_size_mult, tile_data.tileheight * tile_size_mult
     local size = math.min(width, height)
-
-    local drawX = (self.__style.x)*size + tiles.x
-    local drawY = (self.__style.y-1)*size + tiles.y
-
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("line", drawX, drawY, size, size)
-    love.graphics.setColor(1, 1, 1)
+    local drawX = (self.__style.x)*size + (tiles.x * game_state)
+    local drawY = (self.__style.y-1)*size + (tiles.y* game_state)
 
     local frame_width, frame_height = 24, 24  -- sesuai grid Anim8 kamu
     local scale = 2.5
@@ -224,8 +224,20 @@ function Players:draw()
     local offsetX = (size - scaled_width) / 2
     local offsetY = (size - scaled_height) / 2
 
-    local finalX = drawX + offsetX
-    local finalY = drawY + offsetY
+    local finalX = drawX + offsetX * game_state
+    local finalY = drawY + offsetY * game_state
+
+    if self.__status == "finish" then return end
+    if self.__status == "gameover" then
+        self.__style.animations.died:draw(images.airla, self.__style.x, self.__style.y, nil, scale, scale)
+    return
+end
+
+    love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
+
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("line", drawX, drawY, size, size)
+    love.graphics.setColor(1, 1, 1)
 
     self.__style.animations.idle:draw(images.airla, finalX, finalY, nil, scale, scale)
 end

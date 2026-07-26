@@ -8,6 +8,11 @@ function love.load()
 
     images = {}
     images.airla = love.graphics.newImage("asset/image/airla/AnimationSheet.png")
+    images.floor = love.graphics.newImage("asset/image/floor.jpg")
+    images.table = love.graphics.newImage("asset/image/table.png")
+    images.coffee = love.graphics.newImage("asset/image/coffee.jpg")
+    images.wall = love.graphics.newImage("asset/image/wall.jpg")
+    images.chat = love.graphics.newImage("asset/image/chat.png")
 
     -- __debug = true
     game_Width, game_Height = 1080, 720
@@ -91,6 +96,8 @@ function love.update(dt)
             end
         end
 
+        tiles:update(dt)
+
         for i = #tiles.desks, 1, -1 do
             local desk = tiles.desks[i]
             desk:update(dt)
@@ -98,6 +105,14 @@ function love.update(dt)
                 table.remove(tiles.desks, i)
             end
         end
+
+        for i = #tiles.coffees, 1, -1 do
+            local coffee = tiles.coffees[i]
+            if player:get__status() == "gameover" or _game.game_over then
+                table.remove(tiles.coffees, i)
+            end
+        end
+
         player:update(dt)
     end
 end
@@ -114,8 +129,8 @@ function love.draw()
             for _, desk in pairs(tiles.desks) do
                 desk:draw()
             end
+            love.graphics.print(utility.time_to_clock(_game.time), 100, 200, 0, 4, 4)
         end
-        love.graphics.print(utility.time_to_clock(_game.time), 100, 200, 0, 4, 4)
     library.Push:finish()
 end
 

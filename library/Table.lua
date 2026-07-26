@@ -1,7 +1,7 @@
 local desks = {}
 
 local function random_next()
-    return love.math.random(15, 20) * utility.day_to_num(_game.time_s)
+    return love.math.random(0, 1) * utility.day_to_num(_game.time_s)
 end
 
 function desks.new(x,y)
@@ -74,7 +74,7 @@ function desks:draw()
             draw_x = self.x * size + tiles.x
             draw_y = self.y * size + tiles.y
         end
-        love.graphics.print("Hello", draw_x, draw_y)
+        love.graphics.draw(images.chat, draw_x-10, draw_y-10,nil, 0.12,0.12)
     end
 end
 
