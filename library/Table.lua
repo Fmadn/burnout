@@ -1,7 +1,7 @@
 local desks = {}
 
 local function random_next()
-    return love.math.random(0,1) * utility.day_to_num(_game.time_s)
+    return love.math.random(15,20) * utility.day_to_num(_game.time_s)
 end
 
 function desks.new(x,y)
@@ -46,6 +46,9 @@ function desks:update(dt)
                 _game.attempt = _game.attempt - 1
                 __vignette = 1
                 tile_size_mult = 2.1
+
+                local fail_sound = sounds.fail:clone()
+                fail_sound:play()
                 
                 recenter_tiles()
 
@@ -59,7 +62,11 @@ end
 function desks:work()
     if self.requesting then
         player:add__energy(-2)
+        local work_sound = sounds.work:clone()
+        work_sound:play()
         self.requesting = false
+        player.__job_completed = player.__job_completed + 1
+
         -- self = nil
     end
 end

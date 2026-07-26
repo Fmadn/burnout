@@ -61,6 +61,9 @@ function Players.new(x,y, energy)
 
     -- Properti dasar
     self.__status = "active" -- "active" | "gameover"
+    self.__job_completed = 0
+    self.__tile_moved = 0
+    self.__coffee_drunk = 0
 
     self.__style = {}
     self.__style.x = self.x
@@ -163,6 +166,7 @@ function Players:move(dx, dy)
     elseif next_tile_type == "coffee" then
         if coffee then
             coffee:drink()
+            
         end
         return
     elseif next_tile_type == "desk" then
@@ -176,9 +180,13 @@ function Players:move(dx, dy)
         self.energy = self.energy - 1
         self.x = newX
         self.y = newY
+        self.__tile_moved = self.__tile_moved + 1
         self.cooldown[2] = true
         for _, coffee in ipairs(tiles.coffees) do
             coffee:move()
+        end
+        if TUTORIAL then
+            TUTORIAL = false
         end
     else
         print("Move out of bounds: (" .. newX .. ", " .. newY .. ")")
@@ -200,6 +208,19 @@ function Players:set__status(status)
 
         self.__style.x = (self.__style.x) * size + tiles.x
         self.__style.y = (self.__style.y - 1) * size + tiles.y
+
+        
+        for name, music in pairs(musics) do
+            if name ~= "gameover" then
+                if music[2] then
+                    music[1]:stop()
+                    music[2] = false
+                end
+            end
+        end
+
+        musics.gameover[1]:play()
+        musics.gameover[2]=true
     elseif string.lower(status) == "finish" then
         self.__status = "finish"
     end
@@ -227,9 +248,21 @@ function Players:draw()
 
     if self.__status == "finish" then return end
     if self.__status == "gameover" then
+        -- MATI DISINI
         self.__style.animations.died:draw(images.airla, self.__style.x, self.__style.y, nil, scale, scale)
         love.graphics.setFont(fonts.w95f)
-        love.graphics.print("YOU OVERWORKED. [SPACE] TO RESTART", 50, 600)
+        if _game.gameover_time > 3.7 then
+            love.graphics.print("[SPACE] TO RESTART", utility.shake(50,600,-2,2))
+        end
+        if _game.gameover_time > 1.5 then
+            local logo_size = 0.3
+            local logo_scaled_width = images.logo:getWidth() * logo_size
+            local logo_drawX = (game_Width - logo_scaled_width) / 2
+    
+            local logo_drawX, logo_drawY = utility.shake(logo_drawX, 150, -2, 2)
+            
+            love.graphics.draw(images.logo, logo_drawX, logo_drawY, nil, logo_size, logo_size)
+        end
         return
     end
 
@@ -272,9 +305,11 @@ function Players:draw()
     local attempt_size = 0.7
     local width = images.wall:getWidth() * attempt_size
     for i = 1, _game.attempt do
+        local urgency = ((3 - _game.attempt) + 1)
         local individual_y = math.sin(_game.time*i) * 5
         local individual_r = math.cos(_game.time*i) * 0.05
-        love.graphics.draw(images.lives, (i/2.5)*width-60, 170+individual_y,individual_r, attempt_size)
+        local shake_x, shake_y = utility.shake((i/2.5)*width-60, 170+individual_y, -urgency, urgency)
+        love.graphics.draw(images.lives, shake_x, shake_y, individual_r, attempt_size)
     end
 end
 

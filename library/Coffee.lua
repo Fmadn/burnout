@@ -67,9 +67,11 @@ function coffees:drink()
         return
     end
     print("Minum kopi di posisi: (" .. self.x .. ", " .. self.y .. ")")
+    sounds.drink:play()
     player:add__energy(30)
     self.cooldown.active = false
     self.cooldown.duration = 20
+    player.__coffee_drunk = player.__coffee_drunk + 1
 end
 
 return coffees
