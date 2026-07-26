@@ -40,7 +40,25 @@ function coffees:draw()
 
     love.graphics.setColor(1, 1, 1, 1)
     local text = self.cooldown.active and "Ready" or tostring(self.cooldown.duration)
-    love.graphics.print(text, draw_x, draw_y)
+    --------
+    local scale_text = 2
+    local duration_width = fonts.valveit:getWidth(text) * scale_text
+
+    local duration_x = draw_x + (size - duration_width) / 2
+    local stroke_size = 2 
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.setFont(fonts.valveit)
+
+    for ox = -stroke_size, stroke_size do
+        for oy = -stroke_size, stroke_size do
+            if ox ~= 0 or oy ~= 0 then
+                love.graphics.print(text, duration_x + ox, draw_y - 20 + oy, nil, scale_text, scale_text)
+            end
+        end
+    end
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(text, duration_x, draw_y-20, nil, scale_text, scale_text)
 end
 
 function coffees:drink()

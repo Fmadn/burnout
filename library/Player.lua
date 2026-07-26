@@ -162,17 +162,15 @@ function Players:move(dx, dy)
         return
     elseif next_tile_type == "coffee" then
         if coffee then
-            self.cooldown[2] = true
             coffee:drink()
         end
         return
     elseif next_tile_type == "desk" then
         if desk then
-            self.cooldown[2] = true
             desk:work()
         end
         return
-    end
+    end 
     -- Check bounds
     if is_inside(0, 0, tile_data.width-1, tile_data.height-1, newX, newY) then
         self.energy = self.energy - 1
@@ -230,6 +228,8 @@ function Players:draw()
     if self.__status == "finish" then return end
     if self.__status == "gameover" then
         self.__style.animations.died:draw(images.airla, self.__style.x, self.__style.y, nil, scale, scale)
+        love.graphics.setFont(fonts.w95f)
+        love.graphics.print("YOU OVERWORKED. [SPACE] TO RESTART", 50, 600)
         return
     end
 
@@ -240,37 +240,41 @@ function Players:draw()
     self.__style.animations.idle:draw(images.airla, finalX, finalY, nil, scale, scale)
 
     -- Energy
-local scale_text = 2
-local energy_width = fonts.valveit:getWidth(self.energy) * scale_text  -- FIX: ikutin scale
+    local scale_text = 2
+    local energy_width = fonts.valveit:getWidth(self.energy) * scale_text  -- FIX: ikutin scale
 
-local energy_x = drawX + (size - energy_width) / 2
+    local energy_x = drawX + (size - energy_width) / 2
 
--- ENERGY_STROKE
-local stroke_size = 2  -- ini tetep dalam pixel MENTAH (sebelum di-scale)
-love.graphics.setColor(0, 0, 0, 1)
-love.graphics.setFont(fonts.valveit)
+    -- ENERGY_STROKE
+    local stroke_size = 2  -- ini tetep dalam pixel MENTAH (sebelum di-scale)
+    love.graphics.setColor(0, 0, 0, 1)
+    love.graphics.setFont(fonts.valveit)
 
-for ox = -stroke_size, stroke_size do
-    for oy = -stroke_size, stroke_size do
-        if ox ~= 0 or oy ~= 0 then
-            love.graphics.print(self.energy, energy_x + ox, finalY + oy, nil, scale_text, scale_text)
+    for ox = -stroke_size, stroke_size do
+        for oy = -stroke_size, stroke_size do
+            if ox ~= 0 or oy ~= 0 then
+                love.graphics.print(self.energy, energy_x + ox, finalY + oy, nil, scale_text, scale_text)
+            end
         end
     end
-end
 
-love.graphics.setColor(1, 1, 1, 1)
-love.graphics.print(self.energy, energy_x, finalY, nil, scale_text, scale_text)
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.print(self.energy, energy_x, finalY, nil, scale_text, scale_text)
+
+    love.graphics.setColor(1,0,0, __vignette)
+    love.graphics.draw(images.vignette,0,0, nil, 0.56,0.7)
+    love.graphics.setColor(1,1,1,1)
 
     -- Hud
     love.graphics.draw(images.hud,0,0,nil, 1.9,1.9)
 
     -- Lives
-    local attempt_size = 0.9
+    local attempt_size = 0.7
     local width = images.wall:getWidth() * attempt_size
     for i = 1, _game.attempt do
         local individual_y = math.sin(_game.time*i) * 5
-        local individual_r = math.cos(_game.time*i) * 0.1
-        love.graphics.draw(images.lives, (i/3)*width-70, 180+individual_y,individual_r, attempt_size)
+        local individual_r = math.cos(_game.time*i) * 0.05
+        love.graphics.draw(images.lives, (i/2.5)*width-60, 170+individual_y,individual_r, attempt_size)
     end
 end
 

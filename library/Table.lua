@@ -1,7 +1,7 @@
 local desks = {}
 
 local function random_next()
-    return love.math.random(10, 20) * utility.day_to_num(_game.time_s)
+    return love.math.random(0,1) * utility.day_to_num(_game.time_s)
 end
 
 function desks.new(x,y)
@@ -44,6 +44,10 @@ function desks:update(dt)
                     player:set__status("gameover")
                 end
                 _game.attempt = _game.attempt - 1
+                __vignette = 1
+                tile_size_mult = 2.1
+                
+                recenter_tiles()
 
                 self.waiting_time = 0
                 self.requesting = false
@@ -54,7 +58,7 @@ end
 
 function desks:work()
     if self.requesting then
-        player:add__energy(-5)
+        player:add__energy(-2)
         self.requesting = false
         -- self = nil
     end
@@ -75,6 +79,14 @@ function desks:draw()
             draw_y = self.y * size + tiles.y
         end
         love.graphics.draw(images.chat, draw_x-10, draw_y-10,nil, 0.12,0.12)
+        -- Waiting bar
+        love.graphics.setColor(0,0,0,1)
+        local size = self.waiting_time / 5
+        local shakingX,shakingY = utility.shake(draw_x,draw_y+2,-size/2,size/2)
+        love.graphics.rectangle('line', shakingX, shakingY,40,10, 5)
+        love.graphics.setColor(size/2,0,0,1)
+        love.graphics.rectangle('fill', shakingX, shakingY,size*40,10,5)
+        love.graphics.setColor(1,1,1,1)
     end
 end
 

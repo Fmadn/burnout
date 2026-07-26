@@ -73,7 +73,7 @@ function utility.time_to_clock(time)
 
     --// CONFIGURATIONS \\ --
     local start_hour = 7
-    local end_hour = 20
+    local end_hour = 22
     --// \\ // \\ // \\ \\--
 
     local progress = time / _game.total_time              -- 0.0 - 1.0
