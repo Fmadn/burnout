@@ -75,6 +75,15 @@ function utility.time_to_clock(time)
 end
 
 --[=[
+    Ngebagi terus dua nilai
+    berulang kali. Buat tween
+    atau memperhalus aja....
+]=]
+function lerp(a, b, t)
+    return a + (b - a) * t
+end
+
+--[=[
     Ambil sebuah file tile hanya
     lewat nama.
 
