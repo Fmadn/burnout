@@ -230,16 +230,48 @@ function Players:draw()
     if self.__status == "finish" then return end
     if self.__status == "gameover" then
         self.__style.animations.died:draw(images.airla, self.__style.x, self.__style.y, nil, scale, scale)
-    return
-end
-
-    love.graphics.print("Energy: " .. self.energy, 10, 10, 0, 2, 2)
+        return
+    end
 
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", drawX, drawY, size, size)
     love.graphics.setColor(1, 1, 1)
 
     self.__style.animations.idle:draw(images.airla, finalX, finalY, nil, scale, scale)
+
+    -- Energy
+local scale_text = 2
+local energy_width = fonts.valveit:getWidth(self.energy) * scale_text  -- FIX: ikutin scale
+
+local energy_x = drawX + (size - energy_width) / 2
+
+-- ENERGY_STROKE
+local stroke_size = 2  -- ini tetep dalam pixel MENTAH (sebelum di-scale)
+love.graphics.setColor(0, 0, 0, 1)
+love.graphics.setFont(fonts.valveit)
+
+for ox = -stroke_size, stroke_size do
+    for oy = -stroke_size, stroke_size do
+        if ox ~= 0 or oy ~= 0 then
+            love.graphics.print(self.energy, energy_x + ox, finalY + oy, nil, scale_text, scale_text)
+        end
+    end
+end
+
+love.graphics.setColor(1, 1, 1, 1)
+love.graphics.print(self.energy, energy_x, finalY, nil, scale_text, scale_text)
+
+    -- Hud
+    love.graphics.draw(images.hud,0,0,nil, 1.9,1.9)
+
+    -- Lives
+    local attempt_size = 0.9
+    local width = images.wall:getWidth() * attempt_size
+    for i = 1, _game.attempt do
+        local individual_y = math.sin(_game.time*i) * 5
+        local individual_r = math.cos(_game.time*i) * 0.1
+        love.graphics.draw(images.lives, (i/3)*width-70, 180+individual_y,individual_r, attempt_size)
+    end
 end
 
 return Players

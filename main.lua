@@ -13,11 +13,17 @@ function love.load()
     images.coffee = love.graphics.newImage("asset/image/coffee.jpg")
     images.wall = love.graphics.newImage("asset/image/wall.jpg")
     images.chat = love.graphics.newImage("asset/image/chat.png")
+    images.hud = love.graphics.newImage("asset/image/hud.png")
+    images.lives = love.graphics.newImage("asset/image/lives.png")
+
+    fonts = {}
+    fonts.rust = love.graphics.newFont("asset/font/rust.ttf", 30)
+    fonts.valveit = love.graphics.newFont("asset/font/valveit.otf", 10)
 
     -- __debug = true
     game_Width, game_Height = 1080, 720
     wind_Width, wind_Height = love.graphics.getDimensions()
-    wind_scale = 0.9
+    wind_scale = 1
     wind_Width, wind_Height = game_Width * wind_scale, game_Height * wind_scale
 
     middle_x, middle_y = game_Width / 2, game_Height / 2
@@ -129,7 +135,10 @@ function love.draw()
             for _, desk in pairs(tiles.desks) do
                 desk:draw()
             end
-            love.graphics.print(utility.time_to_clock(_game.time), 100, 200, 0, 4, 4)
+            love.graphics.setFont(fonts.rust)
+            love.graphics.setColor(0,0,0,1)
+            love.graphics.print(utility.time_to_clock(_game.time), 35, 60, 0, 2, 2)
+            love.graphics.setColor(1,1,1,1)
         end
     library.Push:finish()
 end
