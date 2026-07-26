@@ -98,7 +98,7 @@ function desks:draw()
         local shakingX,shakingY = utility.shake(draw_x,draw_y+2,-size/2,size/2)
         love.graphics.rectangle('line', shakingX, shakingY,40,10, 5)
         love.graphics.setColor(size/2,0,0,1)
-        love.graphics.rectangle('fill', shakingX, shakingY,size*40,10,5)
+        love.graphics.rectangle('fill', shakingX, shakingY,(size*40)/2,10,5)
         love.graphics.setColor(1,1,1,1)
     end
 end

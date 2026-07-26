@@ -75,7 +75,7 @@ function Players.new(x,y, energy)
     }
     self.__style.animations = {
         idle = library.Anim8.newAnimation(self.__style.grids.airla('1-2',1),0.2),
-        died = library.Anim8.newAnimation(self.__style.grids.airla('1-2',1), 0.2)
+        died = library.Anim8.newAnimation(self.__style.grids.airla('1-2',2), 0.2)
     }
 
     return self

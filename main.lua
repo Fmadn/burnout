@@ -9,7 +9,7 @@ function love.load()
 
     --// DONT BE SHOCKED.... PLS.. :(
     images = {}
-    images.airla = love.graphics.newImage("asset/image/airla/spritesheet.png")
+    images.airla = love.graphics.newImage("asset/image/airla/spritesheet (1).png")
     images.floor = love.graphics.newImage("asset/image/floor.jpg")
     images.table = love.graphics.newImage("asset/image/table.png")
     images.coffee = love.graphics.newImage("asset/image/coffee.jpg")
